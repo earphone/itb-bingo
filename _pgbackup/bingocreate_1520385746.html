@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Random BINGO Card Generator">
+        <meta name="author" content="HIGASHI">
+        <title>BINGOMAN</title>
+        <!-- Bootstrap core CSS -->
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="starter-template.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Disabled</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+        <div class="container">
+            <!-- Invisible fields -->
+            <div style="display:none">
+                <input id="hidden-step" type="number" value="0">
+                <input id="hidden-width" type="number" value="0">
+                <input id="hidden-height" type="number" value="0">
+                <input id="hidden-total" type="number" value="0">
+                <input id="hidden-header" type="text" value="0">
+                <input id="hidden-input-count" type="number" value="0">
+                <input id="hidden-inputs">
+            </div>
+            <div class="starter-template">
+                <h1>BINGOMAN!</h1>
+                <hr />
+                <!-- alerts -->
+                <div id="div-alerts">
+</div>
+                <!-- p elements for each section -->
+                <p id="create-initial" class="lead">Welcome to BingoMan! Start by inputting the size of the board!</p> 
+                <p id="create-heading" style="display:none" class="lead"></p> 
+                <p id="create-inputs" style="display:none" class="lead"></p>
+                <!-- progress bar -->
+                <div class="progress mb-3"> 
+                    <div class="progress-bar" id="progress-create" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>                     
+                </div>                 
+                <!-- div for getting row height and weight -->
+                <div id="div-row-height" class="container">
+                    <div class="row">
+                        <div class="col-md-6 ml-auto mr-auto mb-3">
+                            <h3 class="pt-2">Height</h3>
+                            <input id="input-create-height" type="number" class="form-control mb-3 mr-auto" placeholder="X Rows" data-toggle="tooltip" title="How many Rows high?" data-placement="bottom"> 
+                        </div>
+                        <div class="col-md-6 ml-auto mr-auto mb-3">
+                            <h3 class="pt-2">Width</h3>
+                            <input type="number" class="form-control mb-3" placeholder="Y Columns" data-toggle="tooltip" title="How many Columns wide?" data-placement="bottom" id="input-create-width"> 
+                        </div>
+                    </div>
+                </div>
+                <!-- div for getting the table header -->
+                <div id="div-header" style="display:none">
+                    <h3 class="pt-2">Board Header</h3>
+                    <input id="input-create-header" type="text" class="form-control mb-3" placeholder="Ex: BINGO (case sensitive)">
+                </div>
+                <!-- div for inputs for random table -->
+                <div id="div-inputs" style="display:none">
+                    THIS IS EMPTY
+</div>
+                <!-- div for buttons to go forwards and backwards -->
+                <div id="div-input-buttons" style="display:none">
+                    <button disabled id="button-input-delete" type="button" class="btn btn-warning mb-3" onclick="inputDeleteButton()">Delete Last Line</button>
+                    <button id="button-input-add" type="button" class="btn btn-info mb-3" onclick="inputAddButton()">Add New Line</button>
+                </div>
+                <!-- div for buttons to go forwards and backwards -->
+                <div id="div-buttons">
+                    <button id="button-create-back" type="button" class="btn btn-danger" onclick="createBackButton()">Back</button>
+                    <button id="button-create-next" type="button" class="btn btn-primary" onclick="createNextButton()">Next</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script>
+    		$(function() {
+    			$('[data-toggle="tooltip"]').tooltip();
+			});
+            function createBackButton() {
+                let step = document.getElementById("hidden-step");
+                console.log("button clicked for step: " + step.value);
+                switch(step.value) {
+                    case '0':
+                        break;
+                    case '1':
+                        step.value = '0';
+                        document.getElementById("div-row-height").style = "display:inline";
+                        document.getElementById("div-header").style = "display:none";
+                        document.getElementById("create-initial").style = "display:inline";
+                        document.getElementById("create-heading").style = "display:none";
+                        document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("progress-create").style = "width: 0%";
+                        break;
+                    case '2':
+                        step.value = '1';
+                        document.getElementById("div-row-height").style = "display:none";
+                        document.getElementById("div-header").style = "display:inline";
+                        document.getElementById("div-inputs").style = "display:none";
+                        document.getElementById("div-input-buttons").style = "display:none";
+                        document.getElementById("create-initial").style = "display:none";
+                        document.getElementById("create-heading").style = "display:inline";
+                        document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("progress-create").style = "width: 25%";
+                        break;
+                }
+            }
+            function createNextButton() {
+                let step = document.getElementById("hidden-step");
+                console.log("button clicked for step: " + step.value);
+                let total = 0;
+                let height = 0;
+                let width = 0;
+                switch(step.value) {
+                    case '0':	// Set size
+                        document.getElementById("progress-create").style = "width: 25%";
+                        let height = document.getElementById("input-create-height").value;
+                        let width = document.getElementById("input-create-width").value;
+                        let hiddenH = document.getElementById("hidden-height");
+                        let hiddenW = document.getElementById("hidden-width");
+                        let hiddenT = document.getElementById("hidden-total");
+                        total = height * width;
+                        if(height == null || height == 0) hiddenH.value = 1;
+                        else hiddenH.value = height;
+                        if(width == null || width == 0) hiddenW.value = 1;
+                        else hiddenW.value = width;
+                        if(total == null || total == 0) hiddenT.value = 1;
+                        else hiddenT.value = total;
+                        document.getElementById("div-row-height").style = "display:none";
+                        document.getElementById("div-header").style = "display:inline";
+                        document.getElementById("create-initial").style = "display:none";
+                        document.getElementById("create-heading").style = "display:inline";
+                        document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("create-heading").innerText = "Now enter the '" + hiddenW.value + "' length heading for your board! (Ex: BINGO for length of 5)";
+                        step.value = '1';
+                        break;
+                    case '1':	// Set Header
+                        console.log("Header");
+                        let header = document.getElementById("input-create-header").value;
+                        if(header.length == document.getElementById("hidden-width").value) {  // If header length matches width
+                       		document.getElementById("hidden-header").value = header;
+                            step.value = '2';
+                            document.getElementById("div-row-height").style = "display:none";
+                            document.getElementById("div-header").style = "display:none";
+                            document.getElementById("div-inputs").style = "display:inline";
+                        	document.getElementById("div-input-buttons").style = "display:inline";
+                            document.getElementById("create-initial").style = "display:none";
+                            document.getElementById("create-heading").style = "display:none";
+                            document.getElementById("create-inputs").style = "display:inline";
+                            document.getElementById("progress-create").style = "width: 50%";
+                            document.getElementById("div-inputs").innerHTML = "";
+                        	document.getElementById("create-inputs").innerText = "Please fill in at least " + document.getElementById("hidden-total").value + " fields to fill up the board at random! Anything left blank will be considered a FREE Space... Click the \"Add More\" button to increase the number of fields (Note: Does not change overall size of the board. Some will be left out).";
+                            console.log("cleared inner for inputs");
+                            for(let i = 0; i < document.getElementById("hidden-total").value; i++) {
+                                console.log("setting for i: " + i);
+                                createInput(document.getElementById("div-inputs"), "div-input-" + i, "text", "input-" + i, "Field " + i, "Field " + i);
+                            }
+                            document.getElementById("hidden-input-count").value = document.getElementById("hidden-total").value;
+                        }
+                        else {  // If header length does not match width
+                            createAlert(document.getElementById("div-alerts"),"<strong>BLARG</strong> Your header input needs to be " + document.getElementById("hidden-width").value + " characters long. Not " + header.length + "...");
+                        }
+                        break;
+                    case '2':  // Set input fields
+                        
+                        break;
+                }
+            }
+            
+            // Delete input lines up to the min needed to fill the table
+            function inputDeleteButton() {
+                let deleteButton = document.getElementById("button-input-delete");
+                let count = document.getElementById("hidden-input-count");
+                let total = document.getElementById("hidden-total");
+                
+                
+                // Disable Delete button if min is met
+                count.value = Number(count.value) - 1;
+                if(count.value == total.value) document.getElementById("button-input-delete").setAttribute("disabled", "true");
+            }
+            
+            // Add input lines
+            function inputAddButton() {
+                let addButton = document.getElementById("button-input-add");
+                let count = document.getElementById("hidden-input-count");
+                let total = document.getElementById("hidden-total");
+                
+                createInput(document.getElementById("div-inputs"), "div-input-" + count.value, "text", "input-" + count.value, "Field " + count.value, "Field " + count.value);
+                // Enable Delete button
+                count.value = Number(count.value) + 1;
+                if(count.value > total.value && document.getElementById("button-input-delete").hasAttribute("disabled")) document.getElementById("button-input-delete").removeAttribute("disabled");
+                
+            }
+            
+            // Generic Function to Create an Alert
+            function createAlert(appendTo, insideHTML) {
+                let mainDiv = document.createElement("div");
+                let closeButton = document.createElement("button");
+                let closeSpan = document.createElement("span");
+                
+                mainDiv.innerHTML = insideHTML;
+                mainDiv.className = "alert alert-danger alert-dismissible fade show";
+                mainDiv.role = "alert";
+                closeButton.type = "button";
+                closeButton.className = "close";
+                closeButton.setAttribute("data-dismiss", "alert");
+                closeButton.setAttribute("aria-label", "Close");
+                closeSpan.innerHTML = "&times;";
+                closeSpan.setAttribute("aria-hidden", "true");
+                closeButton.append(closeSpan);
+                mainDiv.append(closeButton);
+                appendTo.append(mainDiv);
+            }
+            
+            // Generic Function to create an Input field
+            function createInput(appendTo, divId, inputType, inputId, inputLabel, inputPlaceholder) {
+                let mainDiv = document.createElement("div");
+                let mainLabel = document.createElement("label");
+                let mainInput = document.createElement("input");
+                
+                mainDiv.className = "col-md-6 ml-auto mr-auto mb-3";
+                mainDiv.id = divId;
+                mainLabel.innerHTML = inputLabel;
+                mainInput.className = "form-control mb-3 mr-auto";
+                mainInput.type = inputType;
+                mainInput.id = inputId;
+                mainInput.placeholder = inputPlaceholder;
+                mainDiv.append(mainLabel);
+                mainDiv.append(mainInput);
+                appendTo.append(mainDiv);
+            }
+		</script>
+    </body>
+</html>
