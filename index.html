@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Random BINGO Card Generator">
+        <meta name="author" content="HIGASHI">
+        <title>BINGOMAN</title>
+        <!-- Bootstrap core CSS -->
+        <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="starter-template.css" rel="stylesheet">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+</li>
+                    <li class="nav-item">
+</li>
+                    <li class="nav-item dropdown">
+                        <div class="dropdown-menu" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="#">Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+        <div class="container">
+            <!-- Invisible fields -->
+            <div style="display:none">
+                <input id="hidden-step" type="number" value="0">
+                <input id="hidden-width" type="number" value="0">
+                <input id="hidden-height" type="number" value="0">
+                <input id="hidden-total" type="number" value="0">
+                <input id="hidden-header" type="text" value="0">
+                <input id="hidden-input-count" type="number" value="0">
+                <input id="hidden-inputs">
+            </div>
+            <div class="starter-template">
+                <h1>Welcome to IN THE BUSY Alpha Projects!!</h1>
+                <hr />
+</div>
+                <!-- p elements for each section -->
+                <div id="div-buttons">
+                    <button id="button-bingo" type="button" class="btn btn-lg btn-primary" onclick="window.location.href='/bingocreate.html'">Bingo...</button>
+                    <button id="button-test" type="button" class="btn btn-lg btn-info" onclick=test()>Pull...</button>
+                    <button id="button-test2" type="button" class="btn btn-lg btn-info" onclick=test()>Shoot...</button>
+                </div>
+            </div>
+        </div>
+        <!-- /.container -->
+        <!-- Bootstrap core JavaScript
+    ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/popper.js"></script>
+        <script src="bootstrap/js/bootstrap.min.js"></script>
+        <!--script src="//cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.0/jquery.matchHeight-min.js"></script-->
+
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDIcNrOI58zVP97q-tJk67ks8sS0CQNnb0",
+            authDomain: "itb-bingo.firebaseapp.com",
+            databaseURL: "https://itb-bingo.firebaseio.com",
+            projectId: "itb-bingo",
+            storageBucket: "itb-bingo.appspot.com",
+            messagingSenderId: "1072203000531"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script>
+    		$(function() {
+    			$('[data-toggle="tooltip"]').tooltip();
+            //    $('.inside').matchHeight(false);
+			});
+            function test() {
+                var myURL = document.location;
+                document.location = myURL + "/parameter";
+            }
+		</script>
+    </body>
+</html>

@@ -24,13 +24,10 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
+</li>
                     <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Disabled</a>
-                    </li>
+</li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                         <div class="dropdown-menu" aria-labelledby="dropdown01">
                             <a class="dropdown-item" href="#">Action</a>
                             <a class="dropdown-item" href="#">Another action</a>
@@ -65,6 +62,7 @@
                 <p id="create-initial" class="lead">Welcome to BingoMan! Start by inputting the size of the board!</p> 
                 <p id="create-heading" style="display:none" class="lead"></p> 
                 <p id="create-inputs" style="display:none" class="lead"></p>
+                <p id="create-table" style="display:none" class="lead"></p>
                 <!-- progress bar -->
                 <div class="progress mb-3"> 
                     <div class="progress-bar" id="progress-create" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>                     
@@ -91,6 +89,10 @@
                 <div id="div-inputs" style="display:none">
                     THIS IS EMPTY
 </div>
+                <!-- div for table randomly generated -->
+                <div id="div-table" style="display:none">
+                    THIS IS EMPTY
+</div>
                 <!-- div for buttons to go forwards and backwards -->
                 <div id="div-input-buttons" style="display:none">
                     <button disabled id="button-input-delete" type="button" class="btn btn-warning mb-3" onclick="inputDeleteButton()">Delete Last Line</button>
@@ -112,6 +114,19 @@
         <script src="bootstrap/js/bootstrap.min.js"></script>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDIcNrOI58zVP97q-tJk67ks8sS0CQNnb0",
+            authDomain: "itb-bingo.firebaseapp.com",
+            databaseURL: "https://itb-bingo.firebaseio.com",
+            projectId: "itb-bingo",
+            storageBucket: "itb-bingo.appspot.com",
+            messagingSenderId: "1072203000531"
+          };
+          firebase.initializeApp(config);
+        </script>
         <script>
     		$(function() {
     			$('[data-toggle="tooltip"]').tooltip();
@@ -126,9 +141,13 @@
                         step.value = '0';
                         document.getElementById("div-row-height").style = "display:inline";
                         document.getElementById("div-header").style = "display:none";
+                        document.getElementById("div-inputs").style = "display:none";
+                        document.getElementById("div-input-buttons").style = "display:none";
+                        document.getElementById("div-table").style = "display:none";
                         document.getElementById("create-initial").style = "display:inline";
                         document.getElementById("create-heading").style = "display:none";
                         document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("create-table").style = "display:none";
                         document.getElementById("progress-create").style = "width: 0%";
                         break;
                     case '2':
@@ -137,10 +156,25 @@
                         document.getElementById("div-header").style = "display:inline";
                         document.getElementById("div-inputs").style = "display:none";
                         document.getElementById("div-input-buttons").style = "display:none";
+                        document.getElementById("div-table").style = "display:none";
                         document.getElementById("create-initial").style = "display:none";
                         document.getElementById("create-heading").style = "display:inline";
                         document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("create-table").style = "display:none";
                         document.getElementById("progress-create").style = "width: 25%";
+                        break;
+                    case '3':
+                        step.value = '2';
+                        document.getElementById("div-row-height").style = "display:none";
+                        document.getElementById("div-header").style = "display:none";
+                        document.getElementById("div-inputs").style = "display:none";
+                        document.getElementById("div-input-buttons").style = "display:none";
+                        document.getElementById("div-table").style = "display:none";
+                        document.getElementById("create-initial").style = "display:none";
+                        document.getElementById("create-heading").style = "display:none";
+                        document.getElementById("create-inputs").style = "display:none";
+                        document.getElementById("create-table").style = "display:none";
+                        document.getElementById("progress-create").style = "width: 50%";
                         break;
                 }
             }
@@ -200,8 +234,19 @@
                             createAlert(document.getElementById("div-alerts"),"<strong>BLARG</strong> Your header input needs to be " + document.getElementById("hidden-width").value + " characters long. Not " + header.length + "...");
                         }
                         break;
-                    case '2':  // Set input fields
-                        
+                    case '2':  // Set input fields and make table
+                        let i = 0;
+                        while(sessionStorage.getItem(i) != null) {
+                            sessionStorage.removeItem(i);
+                            console.log("i: " + i);
+                        	i++;
+                		}
+                        for(let j = 0; j < document.getElementById("hidden-input-count").value; j++) {
+                            sessionStorage.setItem(j, document.getElementById("input-" + j).value);
+                        }
+                        step.value = '3';
+                        let mainDiv = document.getElementById("div-table");
+                        makeTable(mainDiv, "1");
                         break;
                 }
             }
@@ -212,6 +257,8 @@
                 let count = document.getElementById("hidden-input-count");
                 let total = document.getElementById("hidden-total");
                 
+                let deleteDiv = document.getElementById("div-input-" + (Number(count.value) - 1));
+                deleteDiv.parentElement.removeChild(deleteDiv);
                 
                 // Disable Delete button if min is met
                 count.value = Number(count.value) - 1;
@@ -225,6 +272,7 @@
                 let total = document.getElementById("hidden-total");
                 
                 createInput(document.getElementById("div-inputs"), "div-input-" + count.value, "text", "input-" + count.value, "Field " + count.value, "Field " + count.value);
+                
                 // Enable Delete button
                 count.value = Number(count.value) + 1;
                 if(count.value > total.value && document.getElementById("button-input-delete").hasAttribute("disabled")) document.getElementById("button-input-delete").removeAttribute("disabled");
@@ -266,7 +314,40 @@
                 mainInput.placeholder = inputPlaceholder;
                 mainDiv.append(mainLabel);
                 mainDiv.append(mainInput);
-                appendTo.append(mainDiv);
+                appendTo.appendChild(mainDiv);
+            }
+            
+            // Create Table
+            function makeTable(divTable, borderSize) {
+                var table = document.createElement("TABLE");
+                table.border = borderSize;
+
+                let columns = document.getElementById("hidden-width").value;
+                let rows = document.getElementById("hidden-height").value;
+                let header = document.getElementById("hidden-header").value;
+
+                //Add the header row.
+                let row = table.insertRow(-1);
+                
+                for (let i = 0; i < columns; i++) {
+                    var headerCell = document.createElement("TH");
+                    headerCell.innerHTML = header[i];
+                    row.appendChild(headerCell);
+                }
+
+                //Add the data rows.
+                let current = 0;
+                for (let i = 1; i < rows; i++) {
+                    row = table.insertRow(-1);
+                    for (var j = 0; j < columns; j++) {
+                        var cell = row.insertCell(-1);
+                        cell.innerHTML = sessionStorage.getItem(current);
+                        current++;
+                    }
+                }
+                
+                divTable.innerHTML = "";
+                divTable.appendChild(tableDiv);
             }
 		</script>
     </body>
